@@ -1,0 +1,176 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "created_at": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "custom_fields": {
+            "type": ["array", "null"]
+        },
+        "deleted_at": {
+            "type": ["string", "null"]
+        },
+        "description": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "group": {
+            "type": ["string", "null"]
+        },
+        "is_physical": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "ledger": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "pricing": {
+            "properties": {
+                "discount_type": {
+                    "type": ["string", "null"]
+                },
+                "is_tax_included": {
+                    "type": ["boolean", "null"]
+                },
+                "prices": {
+                    "properties": {
+                        "id": {
+                            "type": ["integer", "null"]
+                        },
+                        "first": {
+                            "type": ["string", "null"]
+                        },
+                        "interval": {
+                            "type": ["string", "null"]
+                        },
+                        "is_suggested": {
+                            "type": ["boolean", "null"]
+                        },
+                        "nr_of_cycles": {
+                            "type": ["integer", "null"]
+                        },
+                        "original": {
+                            "type": ["string", "null"]
+                        },
+                        "regular": {
+                            "properties": {
+                                "amount": {
+                                    "type": ["string", "null"]
+                                },
+                                "amount_with_tax": {
+                                    "type": ["string", "null"]
+                                }
+                            },
+                            "type": ["object", "null"]
+                        },
+                        "tiers": {
+                            "type": ["array", "null"]
+                        }
+                    },
+                    "type": ["array", "null"]                        
+                },
+                "shipping": {
+                    "type": ["string", "null"]
+                },
+                "tax": {
+                    "properties": {
+                        "rate": {
+                            "properties": {
+                                "id": {
+                                    "type": ["integer", "null"]
+                                },
+                                "country": {
+                                    "type": ["string", "null"]
+                                },
+                                "percentage": {
+                                    "type": ["string", "null"]
+                                }
+                            },
+                            "type": ["object", "null"]
+                        }
+                    },
+                    "type": ["object", "null"]
+                },
+                "trial": {
+                    "type": ["string", "null"]
+                }
+            },
+            "type": ["object", "null"]
+        },
+        "public_title": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "sku": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "slug": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "statistics": {
+            "properties": {
+                "active_subscriptions": {
+                    "type": ["integer", "null"]
+                },
+                "total_orders": {
+                    "type": ["integer", "null"]
+                },
+                "total_revenue": {
+                    "type": ["string", "null"]
+                }
+            },
+            "type": ["object", "null"]
+        },
+        "stock": {
+            "properties": {
+                "is_enabled": {
+                    "type": ["boolean", "null"]
+                }
+            },
+            "type": ["object", "null"]
+        },
+        "title": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "type": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "updated_at": {
+            "type": [
+                "string",
+                "null"
+            ]
+        }
+    }
+}

@@ -1,0 +1,113 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "first": {
+            "properties": {
+                "amount": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "amount_with_tax": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "interval": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "is_suggested": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "nr_of_cycles": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "original": {
+            "properties": {
+                "amount": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "amount_with_tax": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }   
+            },
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "regular": {
+            "properties": {
+                "amount": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "amount_with_tax": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "tiers": {
+            "properties": {
+                "amount": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "amount_with_tax": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "quantity": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                }
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        }
+    }
+}
