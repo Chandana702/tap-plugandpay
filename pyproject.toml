@@ -7,6 +7,7 @@ authors = [{ name = "Chandana S", email = "chandanas702@gmail.com" }]
 keywords = [
     "ELT",
     "PlugandPay",
+    "tap_plugandpay",
 ]
 classifiers = [
     "Intended Audience :: Developers",

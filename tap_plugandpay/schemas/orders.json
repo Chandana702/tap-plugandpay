@@ -65,7 +65,7 @@
             },
             "type": ["object", "null"]
         },
-        "checkkout": {
+        "checkout": {
             "properties": {
                 "id": {
                     "type": ["integer", "null"]

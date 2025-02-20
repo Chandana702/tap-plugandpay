@@ -1,9 +1,9 @@
 version: 1
 send_anonymous_usage_stats: true
 project_id: "tap-plugandpay"
-default_environment: dev
+default_environment: test
 environments:
-  - name: dev
+  - name: test
 plugins:
   extractors:
     - name: "tap-plugandpay"
@@ -33,3 +33,8 @@ plugins:
           kind: date_iso8601
           label: Start Date
           description: Initial date to start extracting data from
+
+  loaders:
+    - name: target-jsonl
+      variant: andyh1203
+      pip_url: target-jsonl

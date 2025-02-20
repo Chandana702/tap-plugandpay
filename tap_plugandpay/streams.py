@@ -21,6 +21,34 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 #       - Copy-paste as many times as needed to create multiple stream types.
 
 
+class CheckoutsStream(PlugandPayStream):
+    """Checkout stream"""
+
+    name = "checkouts"
+    path = "/checkouts"
+    records_jsonpath = "$.data[*]"
+    primary_keys = ["id"]
+    replication_key = "updated_at"
+    schema_filepath = SCHEMAS_DIR / "checkouts.json"
+
+    def get_url_params(self, context, next_page_token):
+
+        params: dict = {
+            "include": "confirmation,custom_fields,order_bumps,popups,product,product_pricing,settings,statistics,template,upsells,video"
+        }
+
+        if next_page_token:
+            # Check if next_page_token is already parsed
+            if isinstance(next_page_token, ParseResult):
+                parsed_url = next_page_token  # Already parsed
+            else:
+                parsed_url = urlparse(next_page_token)  # Parse if it's a string
+
+            params.update(parse_qsl(parsed_url.query))
+
+        return params
+
+
 class ProductsStream(PlugandPayStream):
     """Product stream"""
 
@@ -191,31 +219,3 @@ class TaxRatesStream(PlugandPayStream):
     primary_keys = ["id"]
     replication_key = "id"
     schema_filepath = SCHEMAS_DIR / "tax_rates.json"
-
-
-class CheckoutsStream(PlugandPayStream):
-    """Checkout stream"""
-
-    name = "checkouts"
-    path = "/checkouts"
-    records_jsonpath = "$.data[*]"
-    primary_keys = ["id"]
-    replication_key = "updated_at"
-    schema_filepath = SCHEMAS_DIR / "checkouts.json"
-
-    def get_url_params(self, context, next_page_token):
-
-        params: dict = {
-            "include": "confirmation,custom_fields,order_bumps,popups,product,product_pricing,settings,statistics,template,upsells,video"
-        }
-
-        if next_page_token:
-            # Check if next_page_token is already parsed
-            if isinstance(next_page_token, ParseResult):
-                parsed_url = next_page_token  # Already parsed
-            else:
-                parsed_url = urlparse(next_page_token)  # Parse if it's a string
-
-            params.update(parse_qsl(parsed_url.query))
-
-        return params
