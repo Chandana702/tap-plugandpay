@@ -12,8 +12,6 @@ STREAM_TYPES = [
     ProductsStream,
     PricesStream,
     OrdersStream,
-    OrderPaymentsStream,
-    OrderCommentsStream,
     SubscriptionsStream,
     SubscriptionCommentsStream,
     TaxRatesStream,

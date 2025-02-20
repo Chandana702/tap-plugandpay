@@ -109,7 +109,7 @@ class OrdersStream(PlugandPayStream):
 
     def get_url_params(self, context, next_page_token):
         params: dict = {
-            "include": "billing,checkout,collection_costs,commissions,custom_fields,discounts,is_collectible,items,note,related_orders,payment,products,subscriptions,shipping,tags,taxes"
+            "include": "billing,checkout,collection_costs,commissions,comments,custom_fields,discounts,is_collectible,items,note,related_orders,payment,products,subscriptions,shipping,tags,taxes"
         }
 
         if next_page_token:
@@ -126,40 +126,6 @@ class OrdersStream(PlugandPayStream):
     def get_child_context(self, record: dict, context: dict) -> dict:
         """Pass order_id to child stream"""
         return {"order_id": record["id"]}
-
-
-class OrderPaymentsStream(PlugandPayStream):
-    """OrderPayment stream"""
-
-    name = "order_payments"
-    path = "/orders/{order_id}/payment"
-    records_jsonpath = "$.data[*]"
-    primary_keys = ["transaction_id"]
-    replication_key = "transaction_id"
-    schema_filepath = SCHEMAS_DIR / "order_payments.json"
-
-    parent_stream_type = OrdersStream
-    ignore_parent_replication_key = True
-
-    def get_child_context(self, record, context):
-        return super().get_child_context(record, context)
-
-
-class OrderCommentsStream(PlugandPayStream):
-    """OrderComment stream"""
-
-    name = "order_comments"
-    path = "/orders/{order_id}/comments"
-    records_jsonpath = "$.data[*]"
-    primary_keys = ["id"]
-    replication_key = "updated_at"
-    schema_filepath = SCHEMAS_DIR / "order_comments.json"
-
-    parent_stream_type = OrdersStream
-    ignore_parent_replication_key = True
-
-    def get_child_context(self, record, context):
-        return super().get_child_context(record, context)
 
 
 class SubscriptionsStream(PlugandPayStream):
