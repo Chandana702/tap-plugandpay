@@ -7,6 +7,7 @@ import typing as t
 from typing import Optional
 from importlib import resources
 from urllib.parse import parse_qsl, urlparse, ParseResult
+from datetime import datetime
 
 from singer_sdk.authenticators import BearerTokenAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -144,19 +145,36 @@ class PlugandPayStream(RESTStream):
     #         input=response.json(parse_float=decimal.Decimal),
     #     )
 
-    # def post_process(
-    #     self,
-    #     row: dict,
-    #     context: Context | None = None,  # noqa: ARG002
-    # ) -> dict | None:
-    #     """As needed, append or transform raw data to match expected structure.
+    def post_process(
+        self,
+        row: dict,
+        context: Context | None = None,  # noqa: ARG002
+    ) -> dict | None:
+        """As needed, append or transform raw data to match expected structure.
 
-    #     Args:
-    #         row: An individual record from the stream.
-    #         context: The stream context.
+        Args:
+            row: An individual record from the stream.
+            context: The stream context.
 
-    #     Returns:
-    #         The updated record dictionary, or ``None`` to skip the record.
-    #     """
-    #     # TODO: Delete this method if not needed.
-    #     return row
+        Returns:
+            The updated record dictionary, or ``None`` to skip the record.
+        """
+        # TODO: Delete this method if not needed.
+
+        start_date = self.config.get("start_date")
+
+        if not start_date:
+            return row
+
+        updated_at_str = row.get("updated_at")
+        if not updated_at_str:
+            return row
+
+        # Append time part to start_date
+        start_date_str = f"{start_date}T00:00:00.000000Z"
+
+        # Convert start_date and updated_at to datetime objects
+        start_date_dt = datetime.strptime(start_date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+        updated_at_dt = datetime.strptime(updated_at_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+        return row if updated_at_dt >= start_date_dt else None

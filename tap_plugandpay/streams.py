@@ -49,6 +49,42 @@ class CheckoutsStream(PlugandPayStream):
         return params
 
 
+class OrdersStream(PlugandPayStream):
+    """Order stream"""
+
+    name = "orders"
+    path = "/orders"
+    records_jsonpath = "$.data[*]"
+    primary_keys = ["id"]
+    replication_key = "updated_at"
+    schema_filepath = SCHEMAS_DIR / "orders.json"
+
+    def get_url_params(self, context, next_page_token):
+        params: dict = {
+            "include": "billing,checkout,collection_costs,commissions,comments,custom_fields,discounts,is_collectible,items,note,related_orders,payment,products,subscriptions,shipping,tags,taxes"
+        }
+
+        if next_page_token:
+            # Check if next_page_token is already parsed
+            if isinstance(next_page_token, ParseResult):
+                parsed_url = next_page_token  # Already parsed
+            else:
+                parsed_url = urlparse(next_page_token)  # Parse if it's a string
+
+            params.update(parse_qsl(parsed_url.query))
+
+        # Add start_date if provided
+        if self.config.get("start_date"):
+            start_date = self.config.get("start_date")
+            params["since_updated_at"] = self.config.get(f"{start_date} 00:00:00")
+
+        return params
+
+    def get_child_context(self, record: dict, context: dict) -> dict:
+        """Pass order_id to child stream"""
+        return {"order_id": record["id"]}
+
+
 class ProductsStream(PlugandPayStream):
     """Product stream"""
 
@@ -95,37 +131,6 @@ class PricesStream(PlugandPayStream):
 
     def get_child_context(self, record, context):
         return super().get_child_context(record, context)
-
-
-class OrdersStream(PlugandPayStream):
-    """Order stream"""
-
-    name = "orders"
-    path = "/orders"
-    records_jsonpath = "$.data[*]"
-    primary_keys = ["id"]
-    replication_key = "updated_at"
-    schema_filepath = SCHEMAS_DIR / "orders.json"
-
-    def get_url_params(self, context, next_page_token):
-        params: dict = {
-            "include": "billing,checkout,collection_costs,commissions,comments,custom_fields,discounts,is_collectible,items,note,related_orders,payment,products,subscriptions,shipping,tags,taxes"
-        }
-
-        if next_page_token:
-            # Check if next_page_token is already parsed
-            if isinstance(next_page_token, ParseResult):
-                parsed_url = next_page_token  # Already parsed
-            else:
-                parsed_url = urlparse(next_page_token)  # Parse if it's a string
-
-            params.update(parse_qsl(parsed_url.query))
-
-        return params
-
-    def get_child_context(self, record: dict, context: dict) -> dict:
-        """Pass order_id to child stream"""
-        return {"order_id": record["id"]}
 
 
 class SubscriptionsStream(PlugandPayStream):
