@@ -2,15 +2,12 @@
 
 from __future__ import annotations
 
-import decimal
 import typing as t
-from typing import Optional
 from importlib import resources
 from urllib.parse import parse_qsl, urlparse, ParseResult
-from datetime import datetime
+from datetime import datetime, date
 
 from singer_sdk.authenticators import BearerTokenAuthenticator
-from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.pagination import BaseHATEOASPaginator  # noqa: TC002
 from singer_sdk.streams import RESTStream
 
@@ -53,9 +50,7 @@ class PlugandPayStream(RESTStream):
             An authenticator instance.
         """
         return BearerTokenAuthenticator.create_for_stream(
-            self,
-            token=self.config.get("auth_token", ""),
-            # token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODM0NWVhMDYzMTM5MzRlMTNhM2JkYmIzYzRlOWJjMGQxZDQ5YjRlM2RkYWU0Nzg3MGFiOTg2NGNkNTY4ODJiZDRmYzRkMTE1NWZkNjIzOWUiLCJpYXQiOjE3MzkxOTQ0NDcuMzE1Mjg5LCJuYmYiOjE3MzkxOTQ0NDcuMzE1MjkxLCJleHAiOjQ4OTQ4NjgwNDcuMzAxMTk1LCJzdWIiOiIyNDQ1NSIsInNjb3BlcyI6W119.O0mNjrWfpfdgxi3GYgHqu8dhm-W10HcAw8HlRXooIycEX0jVn1u928xY5CfPEwjSnwE2bjEd824B7wsQLGjgEYeRXy1tZOWzKf4Tf1KmjJEH6PGYeWvIEjYYdn8ImlgDKP76b2xYEvFkl27cIJxbKN6E3TsK-W6EJ4Z4On1v3aQBMvFZ1y4Qaak2x_hGaehs7B3iE5uV2bVljuZIDdYPxn51zF5PSKw-culP04GrShN1kw87Kc3RsYqDjAvEFPIrgr0tKV0GgVE6gp9_6ePU7VqkmtN_LgdeJYJajcsQD8O39Dr7HGckEWRjQm977V5TZ9Xj13fQ8Nepmnc69yAInKsdSliVMuc_ep7bwrImB4p6LzmaGmwucI5sEhHXZQidU9WUfnrRjX_RVsUJTKSDOgGIVbKKIbdH3WE1zoHPHLy6g940DsE0W5ByjraliMzqr0FjkFtMkOF-jDqI1nPqXpW3r_AvCO5HtJXfz_ZS6cKm0T7Yn4XFetQRtQDg7jPRyUrNEpZsC6kSlEOZ4VSR95Mz0hyXuJRnONA-ly5aGD9BsirC6lUvvDMxBmYvF5-gjYdFCpokxB74-ASJ8OS1WUxeJVymoSGhZ6nuLp4Exn72HatrndQfEkUtQ5WMePp1F1447M4L9S5QKx2QkUX5ntB0fzID0ceu2BHtYJUKUNs",
+            self, token=self.config.get("auth_token", "")
         )
 
     # @property
@@ -170,10 +165,14 @@ class PlugandPayStream(RESTStream):
         if not updated_at_str:
             return row
 
-        # Append time part to start_date
+        # Ensure start_date is a string
+        if isinstance(start_date, date):
+            start_date = start_date.strftime("%Y-%m-%d")
+
+        # Append time part
         start_date_str = f"{start_date}T00:00:00.000000Z"
 
-        # Convert start_date and updated_at to datetime objects
+        # Convert to datetime object
         start_date_dt = datetime.strptime(start_date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
         updated_at_dt = datetime.strptime(updated_at_str, "%Y-%m-%dT%H:%M:%S.%fZ")
 
